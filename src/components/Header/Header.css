@@ -1,0 +1,27 @@
+.header {
+    width: 100%;
+    padding: 16px 24px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.app.dark .header {
+    background-color: #1e1e1e;
+    color: white;
+}
+
+
+.app.light .header {
+    background-color: #ffffff;
+    color: #111;
+    border-bottom: 1px solid #ddd;
+}
+
+
+
+.header__controls {
+    display: flex;
+    gap: 20px;
+}

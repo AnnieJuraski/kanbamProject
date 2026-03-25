@@ -1,0 +1,24 @@
+.language-selector {
+    position: relative;
+}
+
+.language-selector__dropdown {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: #1e293b;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.language-selector__option {
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.language-selector__option:hover {
+    size: 1.15;
+}
