@@ -1,82 +1,20 @@
 import "./App.css";
 import "normalize.css";
 import { useEffect, useState } from "react";
-import { FaTrash } from "react-icons/fa";
-import { CircleFlag } from "react-circle-flags";
+import { translations, languages } from "./translations";
 import Header from "./components/Header/Header";
+import Column from "./components/Column/Column";
+import NewTaskForm from "./components/NewTaskForm/NewTaskForm";
 
 function App() {
-  const translations = {
-    en: {
-      toDo: "To Do",
-      inProgress: "In Progress",
-      onHold: "On Hold",
-      done: "Done",
-      addTask: "Add Task",
-      deleteTask: "Delete Task",
-      placeholder: "Enter a new task",
-      noTasksWarning: "Drop tasks here",
-    },
-    es: {
-      toDo: "Por Hacer",
-      inProgress: "En Progreso",
-      onHold: "En Espera",
-      done: "Hecho",
-      addTask: "Agregar Tarea",
-      deleteTask: "Eliminar Tarea",
-      placeholder: "Ingrese una nueva tarea",
-      noTasksWarning: "Suelta las tareas aquí",
-    },
-    pt: {
-      toDo: "A Fazer",
-      inProgress: "Em Progresso",
-      onHold: "Em Espera",
-      done: "Feito",
-      addTask: "Adicionar Tarefa",
-      deleteTask: "Excluir Tarefa",
-      placeholder: "Insira uma nova tarefa",
-      noTasksWarning: "Solte as tarefas aqui",
-    },
-    it: {
-      toDo: "Da Fare",
-      inProgress: "In Corso",
-      onHold: "In Attesa",
-      done: "Fatto",
-      addTask: "Aggiungi Compito",
-      deleteTask: "Elimina Compito",
-      placeholder: "Inserisci un nuovo compito",
-      noTasksWarning: "Rilascia i compiti qui",
-    },
-  };
-
-  const languages = {
-    en: { label: "English", code: "gb" },
-    pt: { label: "Português", code: "br" },
-    es: { label: "Español", code: "es" },
-    it: { label: "Italiano", code: "it" },
-  };
-
   const getBrowserLanguage = () => {
-    const lang = navigator.language.toLowerCase();
-
-    if (lang.startsWith("en")) return "en";
-    if (lang.startsWith("es")) return "es";
-    if (lang.startsWith("pt")) return "pt";
-    if (lang.startsWith("it")) return "it";
-
-    return "en";
+    const lang = navigator.language.split("-")[0];
+    return translations[lang] ? lang : "en";
   };
 
   const [currentLanguage, setCurrentLanguage] = useState(() => {
-    const savedLang = localStorage.getItem("language");
-    if (savedLang) return savedLang;
-    return getBrowserLanguage();
+    return localStorage.getItem("language") || getBrowserLanguage();
   });
-
-  useEffect(() => {
-    const savedLang = localStorage.getItem("language");
-    if (savedLang) setCurrentLanguage(savedLang);
-  }, []);
 
   useEffect(() => {
     localStorage.setItem("language", currentLanguage);
@@ -84,22 +22,29 @@ function App() {
 
   const t = (key) => translations[currentLanguage][key];
 
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) return savedTheme;
+    return "dark";
+  });
 
-
-
-  const [theme, setTheme] = useState("dark");
+  useEffect(() => {
+    // Aplica o atributo no <html> para o CSS ler as variáveis :root
+    document.documentElement.setAttribute("data-theme", theme);
+    // Salva a preferência do usuário
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
 
   const defaultColumns = {
-  toDo: { key: "toDo", items: [] },
-  inProgress: { key: "inProgress", items: [] },
-  onHold: { key: "onHold", items: [] },
-  done: { key: "done", items: [] },
+    toDo: { key: "toDo", items: [] },
+    inProgress: { key: "inProgress", items: [] },
+    onHold: { key: "onHold", items: [] },
+    done: { key: "done", items: [] },
   };
-  
 
   const [columns, setColumns] = useState(() => {
     const savedBoard = localStorage.getItem("kanbanBoard");
@@ -109,28 +54,22 @@ function App() {
   });
 
   useEffect(() => {
-  localStorage.setItem("kanbanBoard", JSON.stringify(columns));
-}, [columns]);
+    localStorage.setItem("kanbanBoard", JSON.stringify(columns));
+  }, [columns]);
 
-
-  const [newTask, setNewTask] = useState("");
-  const [activeColumn, setActiveColumn] = useState("toDo");
   const [draggedItem, setDraggedItem] = useState(null);
 
-  const addNewTask = () => {
-    if (newTask.trim() === "") return;
-
+  const addNewTask = (taskContent, targetColumn) => {
     setColumns((prev) => ({
       ...prev,
-      [activeColumn]: {
-        ...prev[activeColumn],
+      [targetColumn]: {
+        ...prev[targetColumn],
         items: [
-          ...prev[activeColumn].items,
-          { id: Date.now().toString(), content: newTask },
+          ...prev[targetColumn].items,
+          { id: Date.now().toString(), content: taskContent },
         ],
       },
     }));
-    setNewTask("");
   };
 
   const deleteTask = (columnKey, taskId) => {
@@ -138,9 +77,7 @@ function App() {
       ...prevState,
       [columnKey]: {
         ...prevState[columnKey],
-        items: prevState[columnKey].items.filter(
-          (item) => item.id !== taskId
-        ),
+        items: prevState[columnKey].items.filter((item) => item.id !== taskId),
       },
     }));
   };
@@ -175,9 +112,7 @@ function App() {
   };
 
   return (
-
-    <div className={`app ${theme}`}>
-
+    <div className="app">
       <Header
         theme={theme}
         toggleTheme={toggleTheme}
@@ -186,71 +121,20 @@ function App() {
         languages={languages}
       />
 
-
-      <div className='container'>
-
-        <div className="input-container">
-          <input
-            type="text"
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-            placeholder={t("placeholder")}
-            className="input"
-            onKeyDown={(e) => e.key === "Enter" && addNewTask()}
-          />
-
-          <select
-            value={activeColumn}
-            onChange={(e) => setActiveColumn(e.target.value)}
-            className="new-task__select"
-          >
-            {Object.keys(columns).map((columnKey) => (
-              <option value={columnKey} key={columnKey}>
-                {t(columns[columnKey].key)}
-              </option>
-            ))}
-          </select>
-
-          <button onClick={addNewTask} className="add-button">
-            {t("addTask")}
-          </button>
-        </div>
+      <div className="container">
+        <NewTaskForm columns={columns} addTask={addNewTask} t={t} />
 
         <div className="columns-container">
-          {Object.keys(columns).map((col) => (
-            <div
-              key={col}
-              className="column"
-              onDragOver={(e) => handleDragOver(e, col)}
-              onDrop={(e) => handleDrop(e, col)}
-            >
-              <div className={`column-header ${columns[col].key}`}>
-                {t(columns[col].key)}
-              </div>
-
-              <div className="column-content">
-                {columns[col].items.length === 0 ? (
-                  <div className="empty-warning">{t("noTasksWarning")}</div>
-                ) : (
-                  columns[col].items.map((item) => (
-                    <div
-                      key={item.id}
-                      className="task"
-                      draggable
-                      onDragStart={() => handleDragStart(col, item)}
-                    >
-                      <span className="task-content"> {item.content} </span>
-                      <button
-                        className="deleteTask-button"
-                        onClick={() => deleteTask(col, item.id)}
-                      >
-                        <FaTrash />
-                      </button>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
+          {Object.keys(columns).map((colKey) => (
+            <Column
+              key={colKey}
+              column={columns[colKey]}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+              onDragStart={handleDragStart}
+              onDelete={deleteTask}
+              t={t}
+            />
           ))}
         </div>
       </div>

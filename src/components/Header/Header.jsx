@@ -21,7 +21,7 @@ function Header({
                     languages={languages}
                 />
                 
-                <Button onClick={toggleTheme} variant="control">
+                <Button onClick={toggleTheme} variant="controls">
                     {theme === "dark" ? <FaSun /> : <FaMoon />}
                 </Button>
             </div>
