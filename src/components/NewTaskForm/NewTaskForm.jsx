@@ -6,10 +6,10 @@ function NewTaskForm({ t, addTask, columns }) {
     const [activeColumn, setActiveColumn] = useState("toDo");
 
     const columnColors = {
-        toDo: "#465FD4",
+        toDo: "#2F2DA7",
         inProgress: "#8F11AE",
         onHold: "#C25C28",
-        done: "#10AA41"
+        done: "#219754"
     };
 
     const handleSubmit = () => {
