@@ -18,8 +18,9 @@ function NewTaskForm({ t, addTask, columns }) {
                 type="text"
                 value={newTask}
                 onChange={(e) => setNewTask(e.target.value)}
-                placeholder={t("add_task_placeholder")}
+                placeholder={t("placeholder")}
                 onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+                className="input-task"
             />
             <select
                 value={activeColumn}

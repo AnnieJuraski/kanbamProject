@@ -7,31 +7,46 @@
 }
 
 :root {
-  --background: linear-gradient(135deg, #0e0e0e, #161616);     
-  --text-main: #e2e2e2;      
+  --background: linear-gradient(135deg, #0e0e0e, #161616);
+  --text-main: #e2e2e2;
   --header-bg: #0c0c0c;
   --dropdown-bg: #262626;
-  --accent-color: #994ab3;         
-  --card-bg: #242424;        
-  --column-bg: #1e1e1e;
+  --accent-color: hsl(285, 53%, 41%);
+  --accent-color-hover: hsl(289, 65%, 50%);
+  --card-bg: #121212;
+  --column-bg: #1a1a1a;
   --font-family: 'Saira', sans-serif;
+  --input-bg: #333333;
+  --select-bg: #1d1d1d;
+  --column-container-bg: #202020;
 }
 
 [data-theme='light'] {
   --background: linear-gradient(135deg, #d3d3d3, #bcbcbc);
   --text-main: #333333;
-  --header-bg: #dedede;
-  --accent-color: #4e73df;
+  --header-bg: #e4e4e4;
+  --accent-color: hsl(215, 92%, 62%);
+  --accent-color-hover: hsl(220, 99%, 60%);
   --card-bg: #ffffff;
-  --column-bg: #ebedef;
+  --column-bg: #eaeaea;
   --dropdown-bg: #c3c3c3;
+  --input-bg: #e2e2e2;
+  --select-bg: #d4d4d4;
+  --column-container-bg: #d7d7d7;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   width: 100%;
   min-height: 100vh;
   font-family: var(--font-family);
   background: var(--background);
   color: var(--text-main);
   overflow-x: hidden;
+  transition: 0.3s ease;
+}
+
+html {
+  font-size: 62.5%;
 }

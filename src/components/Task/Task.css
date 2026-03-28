@@ -1,0 +1,72 @@
+.task {
+    background-color: var(--card-bg);
+    box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.8);
+    border-radius: 16px;
+
+    min-height: 100px;
+    padding: 48px 32px;
+
+    font-size: 1.6rem;
+    position: relative;
+}
+
+.deleteTask-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--text-main);
+    transition: 0.2s ease;
+}
+
+.deleteTask-button:hover {
+    color: rgb(237, 25, 50);
+    transform: scale(1.25);
+}
+
+.deleteTask-button svg {
+    width: 2.1rem;
+    height: 2.1rem;
+}
+
+.confirmation-buttons {
+    position: absolute;
+    top: 16px;
+    right: 8px;
+    /* Ajuste para alinhar com o deleteTask-button */
+    display: flex;
+    gap: 12px;
+}
+
+.confirm-btn,
+.cancel-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 2.2rem;
+    padding: 0;
+    transition: 0.3s ease;
+}
+
+
+.confirm-btn:hover,
+.cancel-btn:hover {
+    transform: scale(1.4);
+}
+
+.confirm-btn {
+    color: #2ecc71;
+}
+
+.cancel-btn {
+    color: #e74c3c;
+}
