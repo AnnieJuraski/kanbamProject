@@ -5,6 +5,13 @@ function NewTaskForm({ t, addTask, columns }) {
     const [newTask, setNewTask] = useState("");
     const [activeColumn, setActiveColumn] = useState("toDo");
 
+    const columnColors = {
+        toDo: "#465FD4",
+        inProgress: "#8F11AE",
+        onHold: "#C25C28",
+        done: "#10AA41"
+    };
+
     const handleSubmit = () => {
         if (newTask.trim() === "") return;
 
@@ -33,7 +40,11 @@ function NewTaskForm({ t, addTask, columns }) {
                     </option>
                 ))}
             </select>
-            <button onClick={handleSubmit} className="add-button">
+            <button
+                onClick={handleSubmit}
+                className="add-button"
+                style={{ backgroundColor: columnColors[activeColumn] }}
+            >
                 {t("addTask")}
             </button>
         </div>
